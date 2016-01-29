@@ -15,6 +15,15 @@
 			</div>
 			<div class="well">
 				<p><strong>Steps:</strong></p><%= simple_format(@recipe.description) %>
+				<div class="pull-right">
+					<%= link_to "" do  %>
+						<span class="glyphicon glyphicon-thumbs-up"></span>
+						<% end %> &nbsp&nbsp&nbsp&nbsp
+
+					<%= link_to "" do  %>
+						<span class="glyphicon glyphicon-thumbs-down"></span>
+						<% end %>
+				</div>
 			</div>
 		</div>
 </div>
