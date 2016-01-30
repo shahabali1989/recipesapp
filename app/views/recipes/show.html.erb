@@ -16,12 +16,12 @@
 			<div class="well">
 				<p><strong>Steps:</strong></p><%= simple_format(@recipe.description) %>
 				<div class="pull-right">
-					<%= link_to "" do  %>
-						<span class="glyphicon glyphicon-thumbs-up"></span>
+					<%= link_to like_recipe_path(@recipe, like: true), method: :post do  %>
+						<span class="glyphicon glyphicon-thumbs-up"></span>&nbsp <%= @recipe.thumbs_up_total if @recipe.thumbs_up_total > 0  %>
 						<% end %> &nbsp&nbsp&nbsp&nbsp
 
-					<%= link_to "" do  %>
-						<span class="glyphicon glyphicon-thumbs-down"></span>
+					<%= link_to like_recipe_path(@recipe, like: false), method: :post do  %>
+						<span class="glyphicon glyphicon-thumbs-down"></span>&nbsp <%= @recipe.thumbs_down_total if @recipe.thumbs_down_total > 0 %>
 						<% end %>
 				</div>
 			</div>
