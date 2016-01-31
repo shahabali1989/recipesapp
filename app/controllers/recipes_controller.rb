@@ -1,11 +1,12 @@
 class RecipesController < ApplicationController
 
 def index
-	@recipes = Recipe.all.sort_by{|likes| likes.thumbs_up_total}.reverse
+	@recipes = Recipe.paginate(page: params[:page], per_page: 2)
 end
 
 def show
 	@recipe = Recipe.find(params[:id])
+	@chef = @recipe.chef
 end
 
 def new
