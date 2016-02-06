@@ -16,12 +16,16 @@ end
 def create
 	@recipe = Recipe.new(recipe_params)
 	@recipe.chef = current_user
-
-	if @recipe.save
-		flash[:success] = "Your recipe was saved!"
+	if logged_in?
+		if @recipe.save
+			flash[:success] = "Your recipe was saved!"
+			redirect_to recipes_path
+		else	
+			render :new
+		end
+	else
+		flash[:danger] = "You need to login to create a recipe"
 		redirect_to recipes_path
-	else	
-		render :new
 	end
 end
 
@@ -49,18 +53,23 @@ def update
 end
 
 def like
-	@recipe = Recipe.find(params[:id])
-	newlike = Like.create(like: params[:like], chef: Chef.first, recipe: @recipe)
-	if newlike.valid?
-		if (newlike.like == true)
-			flash[:success] = "You liked this recipe!"
+	if logged_in?	
+		@recipe = Recipe.find(params[:id])
+		newlike = Like.create(like: params[:like], chef: current_user, recipe: @recipe)
+		if newlike.valid?
+			if (newlike.like == true)
+				flash[:success] = "You liked this recipe!"
+			else
+				flash[:success] = "You disliked this recipe!"
+			end
 		else
-			flash[:success] = "You disliked this recipe!"
+			flash[:danger] = "You can only like/dislike a recipe once"
 		end
 	else
-		flash[:danger] = "You can only like/dislike a recipe once"
+		flash[:danger] = "You need to login to like a recipe"
 	end
-	redirect_to :back
+		redirect_to :back
+
 end
 
 private 
