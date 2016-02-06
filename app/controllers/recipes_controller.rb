@@ -15,7 +15,7 @@ end
 
 def create
 	@recipe = Recipe.new(recipe_params)
-	@recipe.chef = Chef.find(3)
+	@recipe.chef = current_user
 
 	if @recipe.save
 		flash[:success] = "Your recipe was saved!"
@@ -26,16 +26,25 @@ def create
 end
 
 def edit
-	@recipe = Recipe.find(params[:id])
+		@recipe = Recipe.find(params[:id])
+		if !logged_in? || @recipe.chef != current_user
+		flash[:danger] = "You are not allowed to edit this recipe"
+		redirect_to recipe_path(@recipe)
+	end
 end
 
 def update
 	@recipe = Recipe.find(params[:id])
-	if @recipe.update(recipe_params)
-		flash[:success] = "Your recipe was updated successfully"
-		redirect_to recipe_path(@recipe)
+	if logged_in? && @recipe.chef == current_user
+		if @recipe.update(recipe_params)
+			flash[:success] = "Your recipe was updated successfully"
+			redirect_to recipe_path(@recipe)
+		else
+			render :edit
+		end
 	else
-		render :edit
+		flash[:danger] = "Could not update recipe. Please login"
+		redirect_to recipe_path(@recipe)
 	end
 end
 
