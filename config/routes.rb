@@ -1,4 +1,16 @@
 Rails.application.routes.draw do
+  get 'logins/new'
+
+  get 'logins/create'
+
+  get 'logins/destroy'
+
+  get 'login/new'
+
+  get 'login/create'
+
+  get 'login/destroy'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -27,7 +39,9 @@ Rails.application.routes.draw do
 
   get '/register', to: 'chefs#new'
 
-
+  get 'login', to: 'logins#new'
+  post 'login', to: 'logins#create'
+  get '/logout', to: 'logins#destroy' 
   # Example resource route with options:
   #   resources :products do
   #     member do
