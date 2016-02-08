@@ -2,15 +2,27 @@ class RecipesController < ApplicationController
 
 def index
 	@recipes = Recipe.paginate(page: params[:page], per_page: 2)
+	respond_to do |format|
+		format.html
+		format.json { render json: @recipes}
+	end
 end
 
 def show
 	@recipe = Recipe.find(params[:id])
 	@chef = @recipe.chef
+	respond_to do |format|
+		format.html
+		format.json { render json: @recipe }
+	end
 end
 
 def new
 	@recipe = Recipe.new
+	if !logged_in?
+		redirect_to recipes_path
+		flash[:warning] = "Log in to create a recipe"
+	end
 end
 
 def create
@@ -31,7 +43,7 @@ end
 
 def edit
 		@recipe = Recipe.find(params[:id])
-		if !logged_in? || @recipe.chef != current_user
+	if !logged_in? || @recipe.chef != current_user
 		flash[:danger] = "You are not allowed to edit this recipe"
 		redirect_to recipe_path(@recipe)
 	end
